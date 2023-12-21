@@ -13,11 +13,13 @@ const requireAuth = async (req, res, next) => {
   const token = authorization.split(" ")[1];
 
   try {
-    const { _id, isAdmin } = jwt.verify(token, process.env.SECRET);
+    const { _id, isAdmin, email } = jwt.verify(token, process.env.SECRET);
 
     req.user = await User.findOne({ _id }).select("_id");
     req.isAdmin = isAdmin;
     res.locals.isAdmin = isAdmin;
+    req.email = email;
+    res.locals.email = email;
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

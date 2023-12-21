@@ -36,7 +36,7 @@ const compSchema = new mongoose.Schema(
     },
     osztaly: {
       type: String,
-      required: true,
+      default: "-",
     },
     tanarok: {
       type: String,
