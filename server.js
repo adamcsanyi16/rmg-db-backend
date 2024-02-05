@@ -138,9 +138,10 @@ app.use(express.urlencoded({ extended: false }));
 //MAIN PAGE
 app.get("/", async (req, res) => {
   try {
-    const users = await User.find({});
+    /*const users = await User.find({});
     console.log(users);
-    res.render("admin.ejs", { users });
+    res.render("admin.ejs", { users });*/
+    res.status(200).json({ msg: "Hello world!" });
   } catch (error) {
     res.status(500).json({ msg: "Felhasználó hiba" });
   }
