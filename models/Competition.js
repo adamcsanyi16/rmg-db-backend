@@ -38,6 +38,10 @@ const compSchema = new mongoose.Schema(
       type: String,
       default: "-",
     },
+    ev: {
+      type: String,
+      required: true,
+    },
     tanarok: {
       type: String,
       required: true,

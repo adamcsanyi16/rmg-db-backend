@@ -245,6 +245,7 @@ app.post("/eredmeny", async (req, res) => {
       tanulok,
       osztaly,
       tanarok,
+      ev,
     } = req.body;
     const newRace = new Race({
       nev: email,
@@ -257,6 +258,7 @@ app.post("/eredmeny", async (req, res) => {
       tanulok,
       osztaly,
       tanarok,
+      ev,
     });
     await newRace.save();
     res.status(200).json({ msg: "Sikeres adat létrehozás!" });
@@ -279,6 +281,7 @@ app.put("/eredmeny", async (req, res) => {
       tanulok,
       osztaly,
       tanarok,
+      ev,
     } = req.body;
 
     await Race.findOneAndUpdate(
@@ -294,6 +297,7 @@ app.put("/eredmeny", async (req, res) => {
         tanulok,
         osztaly,
         tanarok,
+        ev,
       },
       { new: true }
     );
