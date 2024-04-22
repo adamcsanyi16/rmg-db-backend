@@ -16,6 +16,9 @@ const Race = require("./models/Competition");
 const Comps = require("./models/Onlycomps");
 const Agazat = require("./models/Agazat");
 const Student = require("./models/Student");
+const Osztaly = require("./models/Osztaly");
+const Teacher = require("./models/Tanar");
+const Ev = require("./models/Ev");
 
 //HTML EMAIL FOR REG
 const htmlRegister = `
@@ -368,6 +371,7 @@ app.post("/sajatEredmeny", async (req, res) => {
   }
 });
 
+//versenydropdown
 app.get("/verseny", async (req, res) => {
   try {
     const comps = await Comps.find({});
@@ -403,6 +407,7 @@ app.post("/uploadVerseny", upload.single("file"), async (req, res) => {
   }
 });
 
+//agazatdropdown
 app.get("/agazat", async (req, res) => {
   try {
     const agazat = await Agazat.find({});
@@ -438,6 +443,7 @@ app.post("/uploadAgazat", upload.single("file"), async (req, res) => {
   }
 });
 
+//tanulo dropdown
 app.get("/student", async (req, res) => {
   try {
     const student = await Student.find({});
@@ -470,6 +476,102 @@ app.post("/uploadStudent", upload.single("file"), async (req, res) => {
     res.status(200).send({ msg: "Sikeres volt a tanulók feltöltése!" });
   } catch (error) {
     res.status(500).send({ msg: "Valami hiba történt" + error.message });
+  }
+});
+
+//ev dropdown
+app.post("/ev", async (req, res) => {
+  try {
+    const { ev } = req.body;
+    const newEv = new Ev({
+      ev,
+    });
+    await newEv.save();
+    res.status(200).json({ msg: "Sikeres Év feltöltés!" });
+  } catch (error) {
+    res.status(500).json({ msg: "Valami hiba történt" + error.message });
+  }
+});
+
+app.post("/uploadEv", upload.single("file"), async (req, res) => {
+  try {
+    const fileContent = req.file.buffer.toString();
+    const evek = fileContent.split(";").map((ev) => ({ ev }));
+
+    await Ev.insertMany(evek);
+
+    res.status(200).send({ msg: "Sikeres volt a tanévek feltöltése!" });
+  } catch (error) {
+    res.status(500).send({ msg: "Valami hiba történt" + error.message });
+  }
+});
+
+//osztaly dropdown
+app.post("/osztaly", async (req, res) => {
+  try {
+    const { osztaly } = req.body;
+    const newOsztaly = new Osztaly({
+      osztaly,
+    });
+    await newOsztaly.save();
+    res.status(200).json({ msg: "Sikeres osztály feltöltés!" });
+  } catch (error) {
+    res.status(500).json({ msg: "Valami hiba történt" + error.message });
+  }
+});
+
+app.post("/uploadOsztaly", upload.single("file"), async (req, res) => {
+  try {
+    const fileContent = req.file.buffer.toString();
+    const osztalyok = fileContent.split(";").map((osztaly) => ({ osztaly }));
+
+    await Osztaly.insertMany(osztalyok);
+
+    res.status(200).send({ msg: "Sikeres volt az osztályok feltöltése!" });
+  } catch (error) {
+    res.status(500).send({ msg: "Valami hiba történt" + error.message });
+  }
+});
+
+//tanar dropdown
+app.post("/tanar", async (req, res) => {
+  try {
+    const { nev } = req.body;
+    const newTanar = new Teacher({
+      nev,
+    });
+    await newTanar.save();
+    res.status(200).json({ msg: "Sikeres tanár feltöltés!" });
+  } catch (error) {
+    res.status(500).json({ msg: "Valami hiba történt" + error.message });
+  }
+});
+
+app.post("/uploadTanar", upload.single("file"), async (req, res) => {
+  try {
+    const fileContent = req.file.buffer.toString();
+    const tanarok = fileContent.split(";").map((nev) => ({ nev }));
+
+    await Teacher.insertMany(tanarok);
+
+    res.status(200).send({ msg: "Sikeres volt a tanárok feltöltése!" });
+  } catch (error) {
+    res.status(500).send({ msg: "Valami hiba történt" + error.message });
+  }
+});
+
+app.get("/dropdowns", async (req, res) => {
+  try {
+    const student = await Student.find({});
+    const agazat = await Agazat.find({});
+    const comps = await Comps.find({});
+    const osztaly = await Osztaly.find({});
+    const teacher = await Teacher.find({});
+    const ev = await Ev.find({});
+
+    res.status(200).json({ student, agazat, comps, osztaly, teacher, ev });
+  } catch (error) {
+    res.status(500).json({ msg: "Valami hiba történt" + error.message });
   }
 });
 
